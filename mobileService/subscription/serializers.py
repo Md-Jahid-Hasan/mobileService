@@ -31,6 +31,8 @@ class UserSubscriptionSerializer(serializers.ModelSerializer):
         read_only_fields = ['end_date', 'number']
 
     def create(self, validated_data):
+        """before confirming payment check that if already have a plan and
+        user have primary number"""
         user = validated_data['user']
         last_subscription = user.subscription.last()
 

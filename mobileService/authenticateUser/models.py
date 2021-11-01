@@ -6,7 +6,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 
 class CustomAccountManager(BaseUserManager):
-
+    """Custom User manager for creating user"""
     def create_superuser(self,email, username, password, **othersField):
         othersField.setdefault('is_superuser', True)
         othersField.setdefault('is_staff', True)
@@ -33,6 +33,7 @@ class CustomAccountManager(BaseUserManager):
 
 # Custom authentication model
 class User(AbstractBaseUser, PermissionsMixin):
+    """Custom User model"""
     email = models.EmailField(_("email address"), max_length=254, unique=True)
     username = models.CharField(_("username"), max_length=50, unique=True)
     start_date = models.DateTimeField(default=timezone.now)

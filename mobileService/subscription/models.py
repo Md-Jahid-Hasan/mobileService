@@ -39,6 +39,7 @@ class UserSubscription(models.Model):
 
 @receiver(post_save, sender=UserSubscription)
 def subscription_handler(sender,instance, **kwargs):
+    """After save or make payment a update main user profile"""
     instance.user.subs_plan = instance.plan
     instance.user.save()
     

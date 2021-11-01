@@ -6,12 +6,14 @@ from django.contrib.auth import get_user_model as User
 
 
 class UserDetailsSerializer(serializers.ModelSerializer):
+    """Serializer for showing user Details"""
     isOwn = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = User()
         fields = ['username', 'email', 'isOwn']
 
     def get_isOwn(self, obj):
+        """Return if user have a active plan or not"""
         plan = obj.subscription.last()
 
         if plan.end_date:
@@ -24,6 +26,7 @@ class UserDetailsSerializer(serializers.ModelSerializer):
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """Return token for validate user with the user credential"""
     def validate(self, attrs):
         data = super().validate(attrs)
         serializer = UserDetailsSerializer(self.user).data
@@ -37,6 +40,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class UserCreateSerializer(serializers.ModelSerializer, MyTokenObtainPairSerializer):
+    """For creating user"""
     password1 = serializers.CharField(required=True, write_only=True)
     refresh = serializers.CharField(read_only=True)
     access = serializers.CharField(read_only=True)
@@ -52,6 +56,7 @@ class UserCreateSerializer(serializers.ModelSerializer, MyTokenObtainPairSeriali
         return attrs
 
     def create(self, validated_data):
+        """After create user also validate and return token"""
         validated_data.pop('password1')
         user = User().objects.create_user(**validated_data)
         validated_data.pop('username')
@@ -62,6 +67,7 @@ class UserCreateSerializer(serializers.ModelSerializer, MyTokenObtainPairSeriali
         return data
 
 class UserNumberUpdateSerializer(serializers.ModelSerializer):
+    """Serializer for update/change user primary number"""
     class Meta:
         model = User()
         fields = ['primary_number']

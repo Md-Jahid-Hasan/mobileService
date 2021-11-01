@@ -34,6 +34,8 @@ class RetrieveUserView(RetrieveAPIView):
 
 
 class UpdateUserPNumber(ListAPIView, UpdateAPIView):
+    """Change user primary number. Change serializer class based on request method also sending available
+    number of authenticated user"""
     serializer_class = NumberSerializer
     queryset = Number.objects.all()
 
@@ -50,6 +52,7 @@ class UpdateUserPNumber(ListAPIView, UpdateAPIView):
 
 
 class LogOutView(APIView):
+    """Log out usr from current browser"""
     permission_classes = (IsAuthenticated, )
 
     def post(self, request):
@@ -65,6 +68,7 @@ class LogOutView(APIView):
 
 
 class LogOutAllView(APIView):
+    """Log out usr from all available browser browser"""
     permission_classes = (IsAuthenticated, )
 
     def post(self, request):
